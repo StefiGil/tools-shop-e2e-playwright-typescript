@@ -1,0 +1,61 @@
+[
+  {
+    "description": "Email vacío, contraseña válida",
+    "email": "",
+    "password": "password123",
+    "errors": [
+      {
+        "errorId": "email-error",
+        "expectedError": "Email is required"
+      }
+    ]
+  },
+  {
+    "description": "Email válido, contraseña vacía",
+    "email": "customer@practicesoftwaretesting.com",
+    "password": "",
+    "errors": [
+      {
+        "errorId": "password-error",
+        "expectedError": "Password is required"
+      }
+    ]
+  },
+  {
+    "description": "Ambos campos vacíos",
+    "email": "",
+    "password": "",
+    "errors": [
+      {
+        "errorId": "email-error",
+        "expectedError": "Email is required"
+      },
+      {
+        "errorId": "password-error",
+        "expectedError": "Password is required"
+      }
+    ]
+  },
+  {
+    "description": "Credenciales incorrectas",
+    "email": "wrongemail@practicesoftwaretesting.com",
+    "password": "wrongpassword",
+    "errors": [
+      {
+        "dataTest": "login-error",
+        "expectedError": "Invalid email or password"
+      }
+    ]
+  },
+  {
+    "description": "Email sin @",
+    "email": "customerpracticesoftwaretesting.com",
+    "password": "password123",
+    "errors": [
+      {
+        "errorId": "email-error",
+        "expectedError": "Email format is invalid"
+      }
+    ]
+  }
+]

@@ -1,29 +1,20 @@
-import { test as base, expect } from '@playwright/test'
+import { test, expect } from '../../page-objects/fixtures';
+import loginData from '../../data/loginDataExitoso.json';
 
-type TestData = {
-  email: string;
-  password: string;
-};
+for (const user of loginData) {
+  test(`login con ${user.email}`, async ({ loginPage, page }) => {
 
-const test = base.extend<{ testData: TestData }>({
-  testData: async ({}, use) => {
-    const data = { email: "test@example.com", password: "pass123" };
-    await use(data);
-  }
-});
+    await page.goto('https://practicesoftwaretesting.com/auth/login');
 
-test("Should log in with test data", async ( { page, testData } ) => {
-  await page.goto("https://binaryville.com/account/")
+    await loginPage.login(user.email, user.password);
 
-  const emailInput = page.getByRole("textbox", { name: "Email" });
-  await emailInput.fill(testData.email)
+        if (user.role === 'admin') {
+          await expect(loginPage.page).toHaveURL('https://practicesoftwaretesting.com/admin/dashboard');
+        } else if (user.role === 'customer') {
+          await expect(loginPage.page).toHaveURL('https://practicesoftwaretesting.com/account');
+        } else {
+          throw new Error(`Rol desconocido: ${user.role}`);
+        }
 
-  const passwordInput = page.getByRole("textbox", { name: "Password" });
-  await passwordInput.fill(testData.password)
-
-  const signInButton = page.getByRole("button", { name: "Sign in" })
-  await signInButton.click()
-
-  const url = page.url()
-  expect(url).toContain(testData.password)
-})
+  });
+}

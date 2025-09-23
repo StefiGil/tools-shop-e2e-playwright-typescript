@@ -1,0 +1,6 @@
+[
+  { "email": "admin@practicesoftwaretesting.com", "password": "welcome01", "role": "admin" },
+  { "email": "customer@practicesoftwaretesting.com", "password": "welcome01", "role": "customer" },
+  { "email": "customer2@practicesoftwaretesting.com", "password": "welcome01", "role": "customer" },
+  { "email": "customer3@practicesoftwaretesting.com", "password": "pass123", "role": "customer" }
+]
