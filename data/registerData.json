@@ -1,0 +1,15 @@
+[
+  {
+    "firstName": "Carla",
+    "lastName": "Fernandez",
+    "dob": "1995-04-12",
+    "address": "Calle 123",
+    "postcode": "1414",
+    "city": "Buenos Aires",
+    "state": "CABA",
+    "country": "AR",
+    "phone": "1123456789",
+    "email": "carla.fernandez45678@mail.com",
+    "password": "Telescopio923@"
+  }
+]

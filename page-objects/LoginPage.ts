@@ -13,6 +13,10 @@ export class LoginPage {
     this.loginButton = page.locator('[data-test="login-submit"]');
   }
 
+    async goto() {
+    await this.page.goto('https://practicesoftwaretesting.com/auth/login');
+  }
+
   async login(email: string, password: string) {
     await this.emailField.fill(email);
     await this.passwordField.fill(password);
