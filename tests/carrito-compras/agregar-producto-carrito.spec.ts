@@ -1,4 +1,4 @@
-import { test, expect } from '../../page-objects/fixtures';
+import { test, expect } from '../../core/fixtures';
 import products from '../../data/products.json';
 
 test('Agregar producto al carrito desde Home', async ({ loginPage, productsPage, cartPage }) => {

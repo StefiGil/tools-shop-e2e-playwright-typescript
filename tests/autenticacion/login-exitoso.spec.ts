@@ -1,4 +1,4 @@
-import { test, expect } from '../../page-objects/fixtures';
+import { test, expect } from '../../core/fixtures';
 import loginData from '../../data/loginDataExitoso.json';
 
 for (const user of loginData) {

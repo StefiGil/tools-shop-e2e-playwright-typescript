@@ -1,4 +1,4 @@
-import { test, expect } from '../../page-objects/fixtures';
+import { test, expect } from '../../core/fixtures';
 import registerData from '../../data/registerData.json';
 import { RegisterPage } from '../../page-objects/RegisterPage';
 import { url } from 'inspector';
@@ -16,6 +16,6 @@ for (const user of registerData) {
     const uniqueEmail = generateRandomEmail(user.email);
     await registerPage.register({ ...user, email: uniqueEmail });
 
-    await expect(page).toHaveURL('https://practicesoftwaretesting.com/auth/login');
+    await expect(page).toHaveURL('/auth/login');
   });
 }

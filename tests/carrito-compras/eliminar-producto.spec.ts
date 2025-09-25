@@ -1,4 +1,4 @@
-import { test, expect } from '../../page-objects/fixtures';
+import { test, expect } from '../../core/fixtures';
 
 test('Eliminar producto del carrito', async ({ loginPage, productsPage, cartPage }) => {
   const productId = '01K5Z2QDPEB8ST343PR4AZHXVK';
