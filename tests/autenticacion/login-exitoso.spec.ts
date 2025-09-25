@@ -4,14 +4,14 @@ import loginData from '../../data/loginDataExitoso.json';
 for (const user of loginData) {
   test(`login con ${user.email}`, async ({ loginPage, page }) => {
 
-    await page.goto('https://practicesoftwaretesting.com/auth/login');
+    await page.goto('/auth/login');
 
     await loginPage.login(user.email, user.password);
 
         if (user.role === 'admin') {
-          await expect(loginPage.page).toHaveURL('https://practicesoftwaretesting.com/admin/dashboard');
+          await expect(loginPage.page).toHaveURL('/admin/dashboard');
         } else if (user.role === 'customer') {
-          await expect(loginPage.page).toHaveURL('https://practicesoftwaretesting.com/account');
+          await expect(loginPage.page).toHaveURL('/account');
         } else {
           throw new Error(`Rol desconocido: ${user.role}`);
         }

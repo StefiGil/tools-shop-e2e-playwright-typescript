@@ -6,6 +6,8 @@ const user = {
   password: "Telescopio923@"
 };
 
+
+
 test('la sesión persiste después de refrescar la página', async ({ loginPage }) => {
   await loginPage.goto();
   await loginPage.login(user.email, user.password);
@@ -21,6 +23,9 @@ test('la sesión persiste después de refrescar la página', async ({ loginPage 
 });
 
 test('la sesión persiste al navegar a otra sección', async ({ loginPage }) => {
+
+  const BotonPerfil = '[data-test="nav-profile"]';
+
   await loginPage.goto();
   await loginPage.login(user.email, user.password);
 
@@ -28,7 +33,7 @@ test('la sesión persiste al navegar a otra sección', async ({ loginPage }) => 
   await expect(loginPage.page).toHaveURL('https://practicesoftwaretesting.com/account');
 
   // Navegar a otra sección (ejemplo: Orders)
-  await loginPage.page.click('[data-test="nav-profile"]');
+  loginPage.page.click(BotonPerfil);
 
   // Validar que está en la sección de órdenes
   await expect(loginPage.page).toHaveURL(/.*\/account\/profile/);
