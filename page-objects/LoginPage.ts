@@ -13,7 +13,7 @@ export class LoginPage {
     this.loginButton = page.locator('[data-test="login-submit"]');
   }
 
-    async goto() {
+  async goto() {
     await this.page.goto('/auth/login');
   }
 

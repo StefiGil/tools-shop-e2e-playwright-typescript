@@ -1,7 +1,5 @@
 import { test, expect } from '../../core/fixtures';
 import registerData from '../../data/registerData.json';
-import { RegisterPage } from '../../page-objects/RegisterPage';
-import { url } from 'inspector';
 
 function generateRandomEmail(baseEmail: string) {
   const unique = Date.now();
@@ -9,8 +7,7 @@ function generateRandomEmail(baseEmail: string) {
 }
 
 for (const user of registerData) {
-  test(`registro de nuevo usuario: ${user.firstName} ${user.lastName}`, async ({ page }) => {
-    const registerPage = new RegisterPage(page);
+  test(`registro de nuevo usuario: ${user.firstName} ${user.lastName}`, async ({ page, registerPage }) => {
     await registerPage.goto();
 
     const uniqueEmail = generateRandomEmail(user.email);

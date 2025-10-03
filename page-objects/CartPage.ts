@@ -22,10 +22,19 @@ export class CartPage {
     return productTitles.allTextContents();
   }
 
-  async removeProduct(productName: string) {
-    const productRow = this.page.locator(`.cart-item:has-text("${productName}")`);
-    await productRow.locator('.remove-button').click();
-  }
+  async removeProduct(name: string) {
+  // Encontrar el título del producto
+  const productTitle = this.page.locator('[data-test="product-title"]').filter({ hasText: name });
+  
+  // Navegar a la fila (tr) que contiene ese producto
+  const productRow = productTitle.locator('xpath=ancestor::tr[1]');
+  
+  // Hacer click en el botón de eliminar (btn-danger)
+  await productRow.locator('a.btn-danger').click();
+  
+  // Esperar a que el producto desaparezca
+  await productTitle.waitFor({ state: 'detached', timeout: 10000 });
+ }
 
   async updateQuantity(productName: string, quantity: number) {
     const productRow = this.page.locator(`.cart-item:has-text("${productName}")`);

@@ -1,18 +1,19 @@
 import { test, expect } from '../../core/fixtures';
 import products from '../../data/products.json';
 
-test('Agregar producto al carrito desde Home', async ({ loginPage, productsPage, cartPage }) => {
-  const productId = '01K5Z2QDPAFK4GPS3XJ8FWKMBJ';
+  test.beforeEach(async ({ loginPage, dashboardPage, page}) => {
+    test.setTimeout(70000);
+    await loginPage.goto();
+    await loginPage.login('customer@practicesoftwaretesting.com', 'welcome01');
+    await expect(page).toHaveURL(/\/account/);
+    await dashboardPage.gotoHome();
+  });
+
+test('Agregar producto al carrito desde Home', async ({ productsPage, cartPage }) => {
   const productName = "Combination Pliers";
 
-  // Login
-  await loginPage.goto();
-  await loginPage.login('admin@practicesoftwaretesting.com', 'welcome01');
-  await expect(loginPage.page).toHaveURL(/\/admin\/dashboard/);
-
   // Seleccionar producto desde Home
-  await productsPage.gotoHome();
-  await productsPage.selectProduct(productId);
+  await productsPage.selectProduct(productName);
 
   // Agregar al carrito
   await productsPage.addToCart();
@@ -24,23 +25,15 @@ test('Agregar producto al carrito desde Home', async ({ loginPage, productsPage,
 });
 
 
-test('Agregar varios productos al carrito desde Home', async ({ loginPage, productsPage, cartPage }) => {
-  test.setTimeout(60000);
-  // Login
-  await loginPage.goto();
-  await loginPage.login('admin@practicesoftwaretesting.com', 'welcome01');
-  await expect(loginPage.page).toHaveURL(/\/admin\/dashboard/);
-
-  // Ir a Home
-  await productsPage.gotoHome();
+test('Agregar varios productos al carrito desde Home', async ({ productsPage, cartPage, page }) => {
 
   // Agregar todos los productos del JSON
   for (const product of products) {
-    await productsPage.selectProduct(product.id);
+    await productsPage.selectMultiProducts(product.name);
     await productsPage.addToCart();
 
-    // Volver a Home para agregar el siguiente
-    await productsPage.gotoHome();
+  // Volver al dashboard con el botón atrás
+  await productsPage.page.goBack();
   }
 
   // Abrir carrito
@@ -49,8 +42,18 @@ test('Agregar varios productos al carrito desde Home', async ({ loginPage, produ
   // Obtener productos en el carrito
   const productsInCart = (await cartPage.getProductNames()).map(p => p.trim());
 
+  // Refrescar
+  await page.reload();
+
+  // Esperar a que se carguen TODOS los productos esperados
+  await expect(page.locator('[data-test="product-title"]')).toHaveCount(products.length,{timeout:20000});
+  // AHORA SÍ obtener productos en el carrito (DESPUÉS de esperar)
+  const refreshedProductsInCart = (await cartPage.getProductNames()).map(p => p.trim());
+
+  console.log('Productos en el carrito:', refreshedProductsInCart);
+
   // Validar que todos los nombres esperados estén en el carrito
   for (const product of products) {
-    expect(productsInCart).toContain(product.name.trim());
+    expect(refreshedProductsInCart).toContain(product.name.trim());
   }
 });

@@ -1,33 +1,53 @@
 import { test, expect } from '../../core/fixtures';
+import products from '../../data/products.json';
 
-test('Eliminar producto del carrito', async ({ loginPage, productsPage, cartPage }) => {
-  const productId = '01K5Z2QDPEB8ST343PR4AZHXVK';
-  const productName = "Pliers";
-
-  // Login
+test.beforeEach(async ({ loginPage, dashboardPage, page}) => {
+  test.setTimeout(60000);
   await loginPage.goto();
-  await loginPage.login('admin@practicesoftwaretesting.com', 'welcome01');
-  await expect(loginPage.page).toHaveURL(/\/admin\/dashboard/);
-
-  // Seleccionar producto desde Home
-  await productsPage.gotoHome();
-
-  // Seleccionar producto desde Home
-  await productsPage.gotoHome();
-  await productsPage.selectProduct(productId);
-
-  // Agregar al carrito
-  await productsPage.addToCart();
-
-  // Abrir carrito y verificar que esté agregado
-  await cartPage.open();
-  let products = await cartPage.getProductNames();
-  expect(products.map(p => p.trim())).toContain(productName);
-
-  // Eliminar producto
-  await cartPage.removeProduct(productName);
-
-  // Verificar que ya no esté
-  products = await cartPage.getProductNames();
-  expect(products.map(p => p.trim())).not.toContain(productName);
+  await loginPage.login('customer@practicesoftwaretesting.com', 'welcome01');
+  await expect(page).toHaveURL(/\/account/);
+  await dashboardPage.gotoHome();
 });
+
+test('Agregar varios y eliminarlos uno a uno', async ({ page, productsPage, cartPage }) => {
+
+  // Agregar todos los productos del JSON
+  for (const product of products) {
+    await productsPage.selectMultiProducts(product.name);
+    await productsPage.addToCart();
+
+  // Volver al dashboard con el botón atrás
+  await productsPage.page.goBack();
+  }
+
+  // Abrir carrito
+  await cartPage.open();
+
+  // Obtener productos en el carrito
+  const productsInCart = (await cartPage.getProductNames()).map(p => p.trim());
+
+
+
+  // Refrescar
+  await page.reload();
+
+  // Esperar a que se carguen TODOS los productos esperados
+  await expect(page.locator('[data-test="product-title"]')).toHaveCount(products.length,{timeout:20000});
+  // AHORA SÍ obtener productos en el carrito (DESPUÉS de esperar)
+  const refreshedProductsInCart = (await cartPage.getProductNames()).map(p => p.trim());
+
+  console.log('Productos en el carrito:', refreshedProductsInCart);
+
+  // Validar que todos los nombres esperados estén en el carrito
+  for (const product of products) {
+    expect(refreshedProductsInCart).toContain(product.name.trim());
+  }
+
+  for (const product of products) {
+  await cartPage.removeProduct(product.name);
+  }
+
+  // Verificar que no quedan productos en el carrito
+  await expect(page.locator('[data-test="product-title"]')).toHaveCount(0);
+});
+

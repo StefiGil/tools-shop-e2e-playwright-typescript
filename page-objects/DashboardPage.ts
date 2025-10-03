@@ -28,9 +28,9 @@ export class DashboardPage {
   }
 
   async gotoHome() {
-    await this.homeNav.click();
-    await this.page.waitForURL(/.*\/$/);
-  }
+  await this.homeNav.click();
+  await this.page.waitForURL('/');
+}
 
   async gotoCart() {
     await this.cartNav.click();
